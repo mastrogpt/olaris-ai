@@ -47,11 +47,3 @@ tasks:
       set -- ${args[@]}
       test "$1" = "--" && shift
       python scripts/img.py --dir "$OPS_PWD/images" "$@"
-
-
-  codegen:
-    desc: generate code
-    silent: true
-    cmds:
-    - |
-      python scripts/codegen.py "$OPS_PWD/codegen" "$@"
