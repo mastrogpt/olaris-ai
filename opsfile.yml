@@ -1,14 +1,13 @@
 version: 3
 
-
 tasks:
-
 
   cli:
     silent: true
     desc: python repl
     cmds:
     - |
+      cd $OPS_PWD
       if {{.__ide}}
       then ~/.ops/miniconda3/bin/ptipython
       else python -m IPython
@@ -38,17 +37,6 @@ tasks:
     cmds:
     - mkdir -p  $OPS_PWD/workspace
     -  ~/.ops/miniconda3/bin/jupyter notebook
-
-  upload:
-    desc: upload workspace
-    cmds:
-    - which rclone
-    - |
-      set -o allexport
-      source $OPS_PWD/.env
-      envsubst <rclone.conf >_rclone.conf
-      rclone -v --config _rclone.conf copy -L $OPS_PWD/workspace s3://$AWS_BUCKET/workspace
-
 
   img:
     desc: generate images (SDXL)
