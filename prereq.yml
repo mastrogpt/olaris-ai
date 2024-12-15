@@ -1,0 +1,86 @@
+version: 3
+
+vars:
+  OS: "{{or .__OS OS}}"
+  ARCH: "{{or .__ARCH ARCH}}"
+  ARC: '{{if eq .OS "windows"}}.zip{{else}}.tar.gz{{end}}'
+  EXE: '{{if eq .OS "windows"}}.exe{{else}}{{end}}'
+  DRY: ""
+
+tasks:
+ 
+  python:
+    desc: setup python with miniconda
+    vars:
+      VERSION: "py312_24.5.0-0+10"
+      PYVERSION: '{{ (split "+" .VERSION)._0}}'
+      SUFFIX:
+         sh: |
+             case "{{.OS}}-{{.ARCH}}" in
+              linux-amd64) echo "Miniconda3-{{.PYVERSION}}-Linux-x86_64.sh" ;;
+              linux-arm64) echo "Miniconda3-{{.PYVERSION}}-Linux-aarch64.sh" ;;
+              darwin-amd64) echo "Miniconda3-{{.PYVERSION}}-MacOSX-x86_64.sh" ;;
+              darwin-arm64) echo "Miniconda3-{{.PYVERSION}}-MacOSX-arm64.sh" ;;
+              windows-*) echo "Miniconda3-{{.PYVERSION}}-Windows-x64_64.exe" ;;
+              *) echo "unknown" ;;
+             esac
+      URL: "https://repo.anaconda.com/miniconda/{{.SUFFIX}}"
+      FILE: "{{base .URL}}"
+    cmds:
+    - echo "({{.OS}}-{{.ARCH}}) {{.URL}}"
+    - curl -sL "{{.URL}}"  -o "{{.FILE}}"
+    - executable "{{.FILE}}"
+    - "./{{.FILE}} -b -f -p ~/.ops/miniconda3"
+    - ln -sf $HOME/.ops/miniconda3/bin/python python
+    - rm "{{.FILE}}"
+    - |
+      if ! rg 'mininconda3/bin' ~/.bashrc
+      then echo 'export PATH="$HOME/.ops/miniconda3/bin:$PATH"' >>~/.bashrc
+      fi
+    - ./python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+    - ./python -m pip install diffusers transformers accelerate
+    - ./python -m pip install openai python-dotenv ipython ptpython
+    - ./python -m pip install huggingface_hub pillow prompt_toolkit
+    - ./python -m pip install jupyter
+    - ./python -m pip install ollama
+    - ./python -m pip install pymilvus
+    
+  all:
+    - task: python
+  
+  test:
+    vars:
+      DIR: "{{.OPS_PWD}}/bin/{{.OS}}-{{.ARCH}}"
+    cmds:
+    - |
+      {{.DRY}} rm -Rvf {{.DIR}}
+      mkdir -p {{.DIR}}
+      cd {{.DIR}}
+      {{.DRY}} ops -task -t ../../prereq.yml -d {{.DIR}} all
+    #- task: check
+      
+  check:
+    vars:
+      DIR: "{{.OPS_PWD}}/bin/{{.OS}}-{{.ARCH}}"
+      FILETYPE:
+        sh: |
+          case "{{.OS}}" in
+          (windows) echo application/vnd.microsoft.portable-executable ;;
+          (darwin)  echo application/x-mach-binary ;;
+          (linux)   echo application/x-executable ;;
+          (*) unknown ;;
+          esac
+    sources:
+      - '{{.DIR}}/*'
+    status:
+      - false
+    cmds:
+    - for: sources
+      cmd: filetype -m {{.ITEM}} | rg {{.FILETYPE}}
+ 
+  tests:
+   - __OS=linux   __ARCH=amd64 ops -task -t prereq.yml test
+   - __OS=linux   __ARCH=arm64 ops -task -t prereq.yml test
+   - __OS=darwin  __ARCH=amd64 ops -task -t prereq.yml test
+   - __OS=darwin  __ARCH=arm64 ops -task -t prereq.yml test
+   - __OS=windows __ARCH=amd64 ops -task -t prereq.yml test
