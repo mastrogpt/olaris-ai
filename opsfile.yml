@@ -8,12 +8,14 @@ tasks:
     cmds:
     - |
       cd $OPS_PWD
+      set -a
+      source .env
       if {{.__ide}}
       then ~/.ops/miniconda3/bin/ptipython
       else python -m IPython
       fi
 
-  ask:
+  chat:
     desc: ask to the AI (LLama3)
     silent: true
     cmds:
@@ -21,12 +23,7 @@ tasks:
       args={{._args_}}
       set -- ${args[@]}
       test "$1" = "--" && shift
-      python  scripts/ask.py  -{{.__model}} "$@"
-
-  chat:
-    desc: chat with the AI
-    cmds:
-    - python scripts/chat.py -{{.__model}}
+      python chat.py {{._action_}} "$@"
 
   notebook:
     desc: notebook    

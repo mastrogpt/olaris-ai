@@ -9,8 +9,7 @@ Usage:
   ai notebook
   ai upload
   ai cli [--ide]
-  ai ask [--model=<model>] [<args>...]
-  ai chat [--model=<model>]
+  ai chat <action> [<args>...]
   ai img <args>...
   ai codegen
 ```
