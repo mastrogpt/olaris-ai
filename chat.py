@@ -17,22 +17,19 @@ if chat.find("/") == -1:
 
 url = f"{base}/{chat}"
 
-
-def interact(inp):
-    res = req.post(url, json={"input": inp}).json()
+def interact(dict):
+    res = req.post(url, json=dict).json()
     out = res.get("output")
     if out:
         print(out)
         del res["output"]
-    if len(res.keys()) > 0:
-        print(json.dumps(res, indent=2))
-
+    return res
+ 
 # input  = "Hello world"
 if len(sys.argv) > 2:
-   inp = " ".join(sys.argv[2:])
-   interact(inp)
+   text = " ".join(sys.argv[2:])
+   interact({"input": text})
    sys.exit(0)
-
 
 from prompt_toolkit import prompt
 from prompt_toolkit import PromptSession
@@ -60,11 +57,33 @@ def _(event):
 def prompt_continuation(width, line_number, wrap_count):
     return f"{line_number+1}> "
 
+def process_form(session, form):
+    res = {}
+    for entry in form:
+        while True:
+            if entry["type"] == "text":
+                text = session.prompt(f"{entry['label']} ")
+            elif entry["type"] == "textarea":
+                text = session.prompt(f"{entry['label']} ", multiline=True)
+            res[entry["name"]] = text
+            if entry['required'] and text.strip() == '':
+                print("This field is required, please enter a value.")
+            else:
+                break
+    return res
+
 session = PromptSession(multiline=True, prompt_continuation=prompt_continuation, key_bindings=bindings)
 print("Welcome to AI Chat. Exit with an empty line.\nEnd a line with a space for multiline input.\n")
-while True:
-    text = session.prompt(f"{name}> ")
-    if text.strip() == '':
-        print("Goodbye!")
-        break
-    interact(text)
+
+form = interact({})
+while True:    
+    if "form" in form:
+        res = process_form(session, form["form"])
+        print(res)
+        form = interact(res)
+    else:
+        text = session.prompt(f"{name}> ")
+        if text.strip() == '':
+            print("Goodbye!")
+            break
+        form = interact({"input":text})
