@@ -75,15 +75,17 @@ def process_form(session, form):
 session = PromptSession(multiline=True, prompt_continuation=prompt_continuation, key_bindings=bindings)
 print("Welcome to AI Chat. Exit with an empty line.\nEnd a line with a space for multiline input.\n")
 
-form = interact({})
-while True:    
-    if "form" in form:
-        res = process_form(session, form["form"])
+curr = interact({})
+while True:
+    state = curr.get("state", "")    
+    if "form" in curr:
+        res = process_form(session, curr["form"])
         print(res)
-        form = interact(res)
+        res["state"] = state
+        curr = interact(res)
     else:
         text = session.prompt(f"{name}> ")
         if text.strip() == '':
             print("Goodbye!")
             break
-        form = interact({"input":text})
+        curr = interact({"input":text, "state": state})
