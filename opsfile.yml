@@ -20,27 +20,20 @@ tasks:
     silent: true
     cmds:
     - |
+      set -a
+      source $OPS_PWD/.env
       args={{._args_}}
       set -- ${args[@]}
       test "$1" = "--" && shift
       python chat.py {{._action_}} "$@"
 
-  notebook:
-    desc: notebook    
-    dir: $OPS_PWD/notebook
-    env: 
-      HF_HOME: 
-        sh: echo $OPS_PWD/workspace
-    cmds:
-    - mkdir -p  $OPS_PWD/workspace
-    -  ~/.ops/miniconda3/bin/jupyter notebook
-
-  img:
-    desc: generate images (SDXL)
-    silent: true
+  milvus:
+    desc: milvus
     cmds:
     - |
-      args={{._args_}}
-      set -- ${args[@]}
-      test "$1" = "--" && shift
-      python scripts/img.py --dir "$OPS_PWD/images" "$@"
+      set -a
+      source $OPS_PWD/.env
+      {{.add}} && python milvus.py add {{._user_}} {{._password_}}
+      {{.delete}} && python milvus.py delete {{._user_}} 
+      {{.list}} && python milvus.py list
+      true
