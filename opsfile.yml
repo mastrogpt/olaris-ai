@@ -27,13 +27,49 @@ tasks:
       test "$1" = "--" && shift
       python chat.py {{._action_}} "$@"
 
-  milvus:
-    desc: milvus
+  new:
+    desc: generate a new python action
+    env:
+       ACTION: "{{._action_}}"
+       PACKAGE: "{{or ._package_ ._action_}}"
+       DIR:  "packages/{{or ._package_ ._action_}}/{{._action_}}"
+       FILE: "packages/{{or ._package_ ._action_}}/{{._action_}}/{{._action_}}.py"
     cmds:
+    - test ! -e "$OPS_PWD/$FILE" || die "file already exists"
     - |
-      set -a
-      source $OPS_PWD/.env
-      {{.add}} && python milvus.py add {{._user_}} {{._password_}}
-      {{.delete}} && python milvus.py delete {{._user_}} 
-      {{.list}} && python milvus.py list
-      true
+      mkdir -p $OPS_PWD/tests/$PACKAGE
+      mkdir -p $OPS_PWD/$DIR
+    - |
+      cat <<EOF >$OPS_PWD/$FILE
+      def $ACTION(args):
+        return { "output": "$ACTION" }
+      EOF
+    - |
+      cat <<EOF >$OPS_PWD/$DIR/__main__.py
+      #--kind python:default
+      #--web true
+      import $ACTION
+      def main(args):
+        return { "body": $ACTION.$ACTION(args) }
+      EOF
+    - |
+      cat <<EOF >$OPS_PWD/tests/$PACKAGE/test_${ACTION}.py
+      import sys 
+      sys.path.append("$DIR")
+      import $ACTION
+      
+      def test_$ACTION():
+          res = $ACTION.$ACTION({})
+          assert res["output"] == "$ACTION"
+      EOF
+    - |
+      cat <<EOF >$OPS_PWD/tests/$PACKAGE/test_${ACTION}_int.py
+      import os, requests as req
+      def test_$ACTION():
+          url = os.environ.get("OPSDEV_HOST") + "/api/my/$PACKAGE/$ACTION"
+          res = req.get(url).json()
+          assert res.get("output") == "$ACTION"
+      EOF
+
+
+    

@@ -6,9 +6,10 @@ AI tasks to generate code.
 
 ```text
 Usage:
+  ai new <action> [<package>]
+  ai ask [<args>...]
   ai cli [--ide]
   ai chat <action> [<args>...]
-  ai milvus (list|add|delete) [<user>] [<password>]
 ```
 
 # Options:
