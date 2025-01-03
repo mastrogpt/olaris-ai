@@ -9,7 +9,7 @@ tasks:
     - |
       cd $OPS_PWD
       set -a
-      source .env
+      test -e $OPS_PWD/.env && source $OPS_PWD/.env
       if {{.__ide}}
       then ~/.ops/miniconda3/bin/ptipython
       else python -m IPython
@@ -21,7 +21,7 @@ tasks:
     cmds:
     - |
       set -a
-      source $OPS_PWD/.env
+      test -e $OPS_PWD/.env && source $OPS_PWD/.env
       args={{._args_}}
       set -- ${args[@]}
       test "$1" = "--" && shift
