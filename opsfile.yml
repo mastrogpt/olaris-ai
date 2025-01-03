@@ -16,7 +16,7 @@ tasks:
       fi
 
   chat:
-    desc: ask to the AI (LLama3)
+    desc: chat with the AI (LLama3)
     silent: true
     cmds:
     - |
@@ -70,6 +70,3 @@ tasks:
           res = req.get(url).json()
           assert res.get("output") == "$ACTION"
       EOF
-
-
-    
