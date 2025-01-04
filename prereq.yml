@@ -12,16 +12,15 @@ tasks:
   python:
     desc: setup python with miniconda
     vars:
-      VERSION: "py312_24.5.0-0+14"
-      PYVERSION: '{{ (split "+" .VERSION)._0}}'
+      VERSION: "py312_24.5.0-0"
       SUFFIX:
          sh: |
              case "{{.OS}}-{{.ARCH}}" in
-              linux-amd64) echo "Miniconda3-{{.PYVERSION}}-Linux-x86_64.sh" ;;
-              linux-arm64) echo "Miniconda3-{{.PYVERSION}}-Linux-aarch64.sh" ;;
-              darwin-amd64) echo "Miniconda3-{{.PYVERSION}}-MacOSX-x86_64.sh" ;;
-              darwin-arm64) echo "Miniconda3-{{.PYVERSION}}-MacOSX-arm64.sh" ;;
-              windows-*) echo "Miniconda3-{{.PYVERSION}}-Windows-x64_64.exe" ;;
+              linux-amd64) echo "Miniconda3-{{.VERSION}}-Linux-x86_64.sh" ;;
+              linux-arm64) echo "Miniconda3-{{.VERSION}}-Linux-aarch64.sh" ;;
+              darwin-amd64) echo "Miniconda3-{{.VERSION}}-MacOSX-x86_64.sh" ;;
+              darwin-arm64) echo "Miniconda3-{{.VERSION}}-MacOSX-arm64.sh" ;;
+              windows-*) echo "Miniconda3-{{.VERSION}}-Windows-x64_64.exe" ;;
               *) echo "unknown" ;;
              esac
       URL: "https://repo.anaconda.com/miniconda/{{.SUFFIX}}"
@@ -37,21 +36,152 @@ tasks:
       if ! rg 'mininconda3/bin' ~/.bashrc
       then echo 'export PATH="$HOME/.ops/miniconda3/bin:$PATH"' >>~/.bashrc
       fi
-    - ./python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-    - ./python -m pip install diffusers transformers accelerate
-    - ./python -m pip install openai python-dotenv ipython ptpython
-    - ./python -m pip install huggingface_hub pillow prompt_toolkit
-    - ./python -m pip install jupyter
-    - ./python -m pip install ollama
-    - ./python -m pip install pymilvus
-    - ./python -m pip install pytest
-    - ./python -m pip install redis
-    - ./python -m pip install linkedin-api
-    - ./python -m pip install spacy
 
-  all:
-    - task: python
-  
+  python-torch:
+    vars:
+      NAME: torch
+      VERSION: 2.5.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-ipython:
+    vars:
+      NAME: ipython
+      VERSION: 8.31.0
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-ollama:
+    vars:
+      NAME: ollama
+      VERSION: 0.4.5
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-openai:
+    vars:
+      NAME: openai
+      VERSION: 1.59.3
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-dotenv:
+    vars:
+      NAME: python-dotenv
+      VERSION: 1.0.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-pillow:
+    vars:
+      NAME: pillow
+      VERSION: 11.1.0
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-prompt-toolkit:
+    vars:
+      NAME: prompt_toolkit
+      VERSION: 3.0.48
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-pymilvus:
+    vars:
+      NAME: pymilvus
+      VERSION: 2.5.3
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-pytest:
+    vars:
+      NAME: pytest
+      VERSION: 8.3.4
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-redis:
+    vars:
+      NAME: redis
+      VERSION: 5.2.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-spacy:
+    vars:
+      NAME: spacy
+      VERSION: 3.8.3
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-spacy:
+    vars:
+      NAME: spacy
+      VERSION: 3.8.3
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-linkedin-api:
+    vars:
+      NAME: linkedin-api
+      VERSION: 2.3.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-requests:
+    vars:
+      NAME: requests
+      VERSION: 2.32.2
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-transformers:
+    vars:
+      NAME: transformers
+      VERSION: 4.47.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-diffusers:
+    vars:
+      NAME: diffusers
+      VERSION: 0.32.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-accelerate:
+    vars:
+      NAME: accelerate
+      VERSION: 1.2.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+  python-huggingface-hub:
+    vars:
+      NAME: huggingface_hub
+      VERSION: 0.27.0
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
+
   test:
     vars:
       DIR: "{{.OPS_PWD}}/bin/{{.OS}}-{{.ARCH}}"

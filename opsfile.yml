@@ -10,11 +10,8 @@ tasks:
       cd $OPS_PWD
       set -a
       test -e $OPS_PWD/.env && source $OPS_PWD/.env
-      if {{.__ide}}
-      then ~/.ops/miniconda3/bin/ptipython
-      else python -m IPython
-      fi
-
+      python -m IPython
+  
   chat:
     desc: chat with the AI (LLama3)
     silent: true
