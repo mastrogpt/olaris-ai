@@ -37,18 +37,19 @@ tasks:
       then echo 'export PATH="$HOME/.ops/miniconda3/bin:$PATH"' >>~/.bashrc
       fi
 
+
+  python-torch-cpu:
+    vars:
+      NAME: torch
+      VERSION: 2.5.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}  --index-url https://download.pytorch.org/whl/cpu
+    - empty {{.TASK}}
+
   python-requests:
     vars:
       NAME: requests
       VERSION: 2.32.2
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-torch:
-    vars:
-      NAME: torch
-      VERSION: 2.5.1
     cmds:
     - python -m pip install {{.NAME}}=={{.VERSION}}
     - empty {{.TASK}}
