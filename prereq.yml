@@ -133,6 +133,14 @@ tasks:
     - python -m pip install {{.NAME}}=={{.VERSION}}
     - empty {{.TASK}}
 
+  python-pyyaml:
+    vars:
+      NAME: pyyaml
+      VERSION: 6.0.2
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
   test:
     vars:
       DIR: "{{.OPS_PWD}}/bin/{{.OS}}-{{.ARCH}}"

@@ -25,6 +25,7 @@ tasks:
       python chat.py {{._action_}} "$@"
 
   new:
+    silent: true
     desc: generate a new python action
     env:
        ACTION: "{{._action_}}"
@@ -75,7 +76,10 @@ tasks:
     - |
       if test -n "{{._name_}}"
       then
-         echo download lesson {{._name_}} with solution: {{.__solution}}
+         if {{.__solution}}
+         then python lessons.py solution {{._name_}}
+         else python lessons.py lesson {{._name_}}
+         fi
       else
-        echo list avaliable lessons
+        python lessons.py list
       fi
