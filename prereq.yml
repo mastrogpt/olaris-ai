@@ -37,34 +37,10 @@ tasks:
       then echo 'export PATH="$HOME/.ops/miniconda3/bin:$PATH"' >>~/.bashrc
       fi
 
-  python-requests:
-    vars:
-      NAME: requests
-      VERSION: 2.32.2
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
   python-ipython:
     vars:
       NAME: ipython
       VERSION: 8.31.0
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-ollama:
-    vars:
-      NAME: ollama
-      VERSION: 0.4.5
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-openai:
-    vars:
-      NAME: openai
-      VERSION: 1.59.3
     cmds:
     - python -m pip install {{.NAME}}=={{.VERSION}}
     - empty {{.TASK}}
@@ -77,26 +53,10 @@ tasks:
     - python -m pip install {{.NAME}}=={{.VERSION}}
     - empty {{.TASK}}
 
-  python-pillow:
-    vars:
-      NAME: pillow
-      VERSION: 11.1.0
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
   python-prompt-toolkit:
     vars:
       NAME: prompt_toolkit
       VERSION: 3.0.48
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-pymilvus:
-    vars:
-      NAME: pymilvus
-      VERSION: 2.5.3
     cmds:
     - python -m pip install {{.NAME}}=={{.VERSION}}
     - empty {{.TASK}}
@@ -109,36 +69,11 @@ tasks:
     - python -m pip install {{.NAME}}=={{.VERSION}}
     - empty {{.TASK}}
 
-  python-redis:
+  python-runtime-requirements:
     vars:
-      NAME: redis
-      VERSION: 5.2.1
+      VERSION: 6fe5329e70fdbf46ba1721dcaf5c2b5a845ad733
     cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-spacy:
-    vars:
-      NAME: spacy
-      VERSION: 3.8.3
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-linkedin-api:
-    vars:
-      NAME: linkedin-api
-      VERSION: 2.3.1
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-pyyaml:
-    vars:
-      NAME: pyyaml
-      VERSION: 6.0.2
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - python -m pip install -r https://raw.githubusercontent.com/sciabarracom/openserverless-runtimes/{{.VERSION}}/runtime/python/v3.12/requirements.txt
     - empty {{.TASK}}
 
   test:
