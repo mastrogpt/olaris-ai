@@ -67,3 +67,15 @@ tasks:
           res = req.get(url).json()
           assert res.get("output") == "$ACTION"
       EOF
+
+  lesson:
+    desc: lessons
+    silent: true
+    cmds:
+    - |
+      if test -n "{{._name_}}"
+      then
+         echo download lesson {{._name_}} with solution: {{.__solution}}
+      else
+        echo list avaliable lessons
+      fi
