@@ -37,15 +37,6 @@ tasks:
       then echo 'export PATH="$HOME/.ops/miniconda3/bin:$PATH"' >>~/.bashrc
       fi
 
-
-  python-torch-cpu:
-    vars:
-      NAME: torch
-      VERSION: 2.5.1
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}  --index-url https://download.pytorch.org/whl/cpu
-    - empty {{.TASK}}
-
   python-requests:
     vars:
       NAME: requests
@@ -141,39 +132,6 @@ tasks:
     cmds:
     - python -m pip install {{.NAME}}=={{.VERSION}}
     - empty {{.TASK}}
-
-  python-transformers:
-    vars:
-      NAME: transformers
-      VERSION: 4.47.1
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-diffusers:
-    vars:
-      NAME: diffusers
-      VERSION: 0.32.1
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-accelerate:
-    vars:
-      NAME: accelerate
-      VERSION: 1.2.1
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
-  python-huggingface-hub:
-    vars:
-      NAME: huggingface_hub
-      VERSION: 0.27.0
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
-
 
   test:
     vars:
