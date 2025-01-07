@@ -6,10 +6,11 @@ AI tasks to generate code.
 
 ```text
 Usage:
-  ai lesson [<name>] [--solution]
-  ai new <action> [<package>]
-  ai chat <action> [<args>...]
   ai cli
+  ai new <action> [<package>]
+  ai lesson [<name>] [--solution]
+  ai stream <action>
+  ai chat <action> [<args>...]
 ```
 
 

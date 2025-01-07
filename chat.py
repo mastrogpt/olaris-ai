@@ -19,10 +19,11 @@ url = f"{base}/{chat}"
 
 def interact(dict):
     res = req.post(url, json=dict).json()
-    out = res.get("output")
-    if out:
-        print(out)
-        del res["output"]
+    while res.get("continue"):
+        out = res.get("output")
+        if out:
+            print(out)
+            del res["output"]
     return res
  
 # input  = "Hello world"

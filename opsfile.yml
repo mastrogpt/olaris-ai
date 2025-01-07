@@ -70,6 +70,7 @@ tasks:
           assert res.get("output") == "$ACTION"
       EOF
 
+
   lesson:
     desc: lessons
     silent: true
@@ -84,3 +85,9 @@ tasks:
       else
         python lessons.py list
       fi
+
+  stream:
+    desc: stream an action
+    cmds:
+      - |
+        python stream.py {{._action_}}
