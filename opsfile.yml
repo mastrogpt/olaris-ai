@@ -10,6 +10,7 @@ tasks:
       cd $OPS_PWD
       set -a
       test -e $OPS_PWD/.env && source $OPS_PWD/.env
+      test -e $OPS_PWD/.testenv && source $OPS_PWD/.testenv
       python -m IPython
   
   chat:
