@@ -40,18 +40,21 @@ tasks:
   python-ipython:
     vars:
       NAME: ipython
-      VERSION: 8.31.0
+      VERSION: 8.31.0+1
+      VERSION1: 1.0.1
     cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - python -m pip install {{.NAME}}=={{splitList  "+" .VERSION | first}} python-dotenv=={{.VERSION1}}
+    - python -m IPython profile create
+    - |
+      cat <<EOF >~/.ipython/profile_default/startup/00-startup.ipy
+      %load_ext autoreload
+      %autoreload 2
+      from dotenv import load_dotenv
+      load_dotenv(".env")
+      load_dotenv("tests/.env", override=True)
+      EOF
     - empty {{.TASK}}
 
-  python-dotenv:
-    vars:
-      NAME: python-dotenv
-      VERSION: 1.0.1
-    cmds:
-    - python -m pip install {{.NAME}}=={{.VERSION}}
-    - empty {{.TASK}}
 
   python-prompt-toolkit:
     vars:

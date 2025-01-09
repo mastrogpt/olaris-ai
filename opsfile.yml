@@ -70,7 +70,6 @@ tasks:
           assert res.get("output") == "$ACTION"
       EOF
 
-
   lesson:
     desc: lessons
     silent: true
