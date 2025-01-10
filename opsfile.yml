@@ -25,6 +25,33 @@ tasks:
       test "$1" = "--" && shift
       python chat.py {{._action_}} "$@"
 
+
+  lesson:
+    desc: lessons
+    silent: true
+    cmds:
+    - |
+      if test -n "{{._name_}}"
+      then
+         if {{.__solution}}
+         then python lessons.py solution {{._name_}}
+         else python lessons.py lesson {{._name_}}
+         fi
+      else
+        python lessons.py list
+      fi
+
+  stream:
+    silent: true
+    desc: stream an action
+    cmds:
+      - |
+        args={{._args_}}
+        set -- ${args[@]}
+        test "$1" = "--" && shift
+        python stream.py {{._action_}} "$@"
+
+
   new:
     silent: true
     desc: generate a new python action
@@ -69,24 +96,3 @@ tasks:
           res = req.get(url).json()
           assert res.get("output") == "$ACTION"
       EOF
-
-  lesson:
-    desc: lessons
-    silent: true
-    cmds:
-    - |
-      if test -n "{{._name_}}"
-      then
-         if {{.__solution}}
-         then python lessons.py solution {{._name_}}
-         else python lessons.py lesson {{._name_}}
-         fi
-      else
-        python lessons.py list
-      fi
-
-  stream:
-    desc: stream an action
-    cmds:
-      - |
-        python stream.py {{._action_}}
