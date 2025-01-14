@@ -79,6 +79,14 @@ tasks:
     - python -m pip install -r https://raw.githubusercontent.com/sciabarracom/openserverless-runtimes/{{.VERSION}}/runtime/python/v3.12/requirements.txt
     - empty {{.TASK}}
 
+  python-ipdb:
+    vars:
+      NAME: ipdb
+      VERSION: 0.13.1
+    cmds:
+    - python -m pip install {{.NAME}}=={{.VERSION}}
+    - empty {{.TASK}}
+
   test:
     vars:
       DIR: "{{.OPS_PWD}}/bin/{{.OS}}-{{.ARCH}}"
