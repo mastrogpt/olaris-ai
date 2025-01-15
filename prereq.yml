@@ -74,10 +74,11 @@ tasks:
 
   python-runtime-requirements:
     vars:
-      VERSION: 6fe5329e70fdbf46ba1721dcaf5c2b5a845ad733
+      VERSION: 2501151327
     cmds:
-    - python -m pip install -r https://raw.githubusercontent.com/sciabarracom/openserverless-runtimes/{{.VERSION}}/runtime/python/v3.12/requirements.txt
+    - python -m pip install -r https://github.com/apache/openserverless-runtimes/blob/{{.VERSION}}/runtime/python/v3.12/requirements.txt
     - empty {{.TASK}}
+
 
   python-ipdb:
     vars:
