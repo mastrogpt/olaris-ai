@@ -11,6 +11,7 @@ Usage:
   ai chat <action> [<args>...]
   ai stream <action> [<args>...]
   ai new <action> [<package>]
+  ai user (add|delete|update) <user>
 ```
 
 

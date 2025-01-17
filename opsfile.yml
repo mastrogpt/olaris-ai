@@ -25,7 +25,6 @@ tasks:
       test "$1" = "--" && shift
       python chat.py {{._action_}} "$@"
 
-
   lesson:
     desc: lessons
     silent: true
@@ -51,6 +50,18 @@ tasks:
         test "$1" = "--" && shift
         python stream.py {{._action_}} "$@"
 
+  user:
+    silent: true
+    desc: stream an action
+    cmds:
+      - |
+        if {{.add}} 
+        then python user.py add {{._user_}}
+        elif {{.delete}} 
+        then python user.py delete {{._user_}}
+        elif {{.update}} 
+        then python user.py update {{._user_}}
+        fi
 
   new:
     silent: true

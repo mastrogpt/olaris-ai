@@ -55,7 +55,6 @@ tasks:
       EOF
     - empty {{.TASK}}
 
-
   python-prompt-toolkit:
     vars:
       NAME: prompt_toolkit
