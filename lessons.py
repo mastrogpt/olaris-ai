@@ -45,11 +45,11 @@ def lesson(name, solution):
             else:
                 tgt = f"{os.getenv("OPS_PWD")}/{child}"
 
-        print(src)
-        print(tgt)
+        #print(src)
         if os.path.exists(tgt):
             print(f"Skipping {tgt} as it already exists")
             continue
+        print(tgt)
         os.makedirs(os.path.dirname(tgt), exist_ok=True)
         res = requests.get(src)
         if res.status_code != 200:
