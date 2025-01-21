@@ -49,14 +49,20 @@ def lesson(name, solution):
         if os.path.exists(tgt):
             print(f"Skipping {tgt} as it already exists")
             continue
-        print(tgt)
+        
         os.makedirs(os.path.dirname(tgt), exist_ok=True)
-        res = requests.get(src)
-        if res.status_code != 200:
-            print(f"Failed to download {src}")
-            continue
-        with open(tgt, "w") as f:
-            f.write(res.text)      
+        try:
+            with requests.get(src, stream=True) as response:
+                response.raise_for_status()  # Raise an exception for HTTP errors
+                # Open a local file in binary write mode
+                with open(tgt, "wb") as file:
+                    # Write the response content to the file in chunks
+                    for chunk in response.iter_content(chunk_size=8192):  # 8 KB chunks
+                        if chunk:  # Avoid writing empty chunks
+                            file.write(chunk)
+            print(tgt)
+        except Exception as e:
+            print(f"Failed to download {src}: {str(e)}")
     
 def main(args):        
 
