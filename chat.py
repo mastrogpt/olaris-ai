@@ -54,6 +54,7 @@ def interact(args):
         dic = req.post(invoker, json=args).json()
         streaming = dic.get("streaming", False)
         out = dic.get("output", out)
+        state = dic.get("state", state)
         print(out)
         return dic
 
@@ -141,7 +142,6 @@ def upload(file):
     except Exception as e:
         print(str(e))
         return None
-    
 
 #def log(x):
 #    with open("log.txt", "a") as f:
@@ -187,7 +187,7 @@ curr = interact({})
 while True:
     if "form" in curr:
         res = process_form(session, curr["form"])
-        print(res)
+        print("Form:", json.dumps(res,indent=2))
         res["state"] = state
         curr = interact(res)
     else:
