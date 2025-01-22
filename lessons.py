@@ -64,8 +64,7 @@ def lesson(name, solution):
         except Exception as e:
             print(f"Failed to download {src}: {str(e)}")
     
-def main(args):        
-
+def main(args):
     if len(args) == 0:
         print("""usage:
     list
