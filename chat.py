@@ -107,7 +107,7 @@ def process_form(session, form):
                 print("This field is required, please enter a value.")
             else:
                 break
-    return res
+    return {"form": res}
 
 import boto3
 from botocore.client import Config
@@ -186,9 +186,9 @@ print("Welcome to AI Chat. Exit with an empty line.\nEnd a line with a space for
 curr = interact({})
 while True:
     if "form" in curr:
-        res = process_form(session, curr["form"])
-        print("Form:", json.dumps(res,indent=2))
-        res["state"] = state
+        data = process_form(session, curr["form"])
+        #print("Form:", json.dumps(res,indent=2))
+        res = {"state": state, "input": data}
         curr = interact(res)
     else:
         text = session.prompt(f"{name}> ")
