@@ -73,7 +73,7 @@ tasks:
 
   python-runtime-requirements:
     vars:
-      VERSION: 2501151338
+      VERSION: 2501172243
     cmds:
     - python -m pip install -r https://raw.githubusercontent.com/apache/openserverless-runtimes/refs/tags/{{.VERSION}}/runtime/python/v3.12/requirements.txt
     - empty {{.TASK}}
