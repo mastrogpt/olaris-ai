@@ -12,6 +12,7 @@ Usage:
   ai stream <action> [<args>...]
   ai new <action> [<package>]
   ai user (add|delete|update) <user>
+  ai loader [--action=<action>] <file>... 
 ```
 
 
