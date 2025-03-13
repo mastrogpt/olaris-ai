@@ -109,7 +109,7 @@ tasks:
       EOF
 
   loader:
-    silent: true
+    silent: false
     desc: export a pdf to text
     cmds:
      - |
@@ -118,8 +118,8 @@ tasks:
         script="$(realpath loader.py)"
         cd $OPS_PWD
         if test -z {{.__action}}
-        then python "$script" - "$@"
-        else python "$script" {{.__action}} "$@"
+        then python "$script" - {{.__pages}} "$@"
+        else python "$script" {{.__action}} {{.__pages}} "$@"
         fi
 
       

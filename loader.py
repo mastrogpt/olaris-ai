@@ -13,9 +13,10 @@ except LookupError:
 
 from nltk.tokenize import sent_tokenize
 
-USAGE="pdf2txt (<action>|-) <file>..."
+USAGE="pdf2txt (<action>|-) <pages> <file>..."
 
-def parse_pdf(file):
+
+def parse_pdf(file, pages):
     #print("*** parsing ", file)
     doc = pymupdf.open(file)
     i = 0
@@ -24,14 +25,17 @@ def parse_pdf(file):
         #page = list(doc)[i]
         i+=1
         text = page.get_text()
-        sentences = sent_tokenize(text)
-        enum = enumerate(sentences, 1)
-        for j, sentence in enum :
-            #_, sentence = next(enum)
-            sent = " ".join(sentence.split())
-            if sent == ".": continue
-            out += f"{sent}\n"
-            #print(f"{i}.{j}\t{sent}\n")
+        if pages:
+            out += text.replace("\n", " ")+"\n"
+        else:
+            sentences = sent_tokenize(text)
+            enum = enumerate(sentences, 1)
+            for j, sentence in enum :
+                #_, sentence = next(enum)
+                sent = " ".join(sentence.split())
+                if sent == ".": continue
+                out += f"{sent}\n"
+                #print(f"{i}.{j}\t{sent}\n")
     res = f"{file}.txt" 
     Path(res).write_text(out)
     print("saved", res)
@@ -65,10 +69,12 @@ def main(argv):
         print(USAGE)
         return
     action = argv[0]
-    for filename in argv[1:]:
+    pages = argv[1] == "true"
+    print(action, pages)
+    for filename in argv[2:]:
         if filename.endswith(".pdf"):
             print(">>> converting", filename)
-            filename = parse_pdf(filename)
+            filename = parse_pdf(filename, pages)
         if action != "-":
             print(">>> uploading", filename)
             upload_text(action, filename)
