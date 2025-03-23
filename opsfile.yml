@@ -109,18 +109,31 @@ tasks:
       EOF
 
   loader:
-    silent: false
+    silent: true
     desc: export a pdf to text
     cmds:
+     - |
+       if {{.__clean}}
+       then ops invoke {{.__action}} -p "input" '!!{{.__collection}}' | jq -r .body.output
+       fi
      - |
         args={{._file_}} 
         set -- ${args[@]}
         script="$(realpath loader.py)"
         cd $OPS_PWD
-        if test -z {{.__action}}
-        then python "$script" - {{.__pages}} "$@"
-        else python "$script" {{.__action}} {{.__pages}} "$@"
-        fi
+        #if test -z {{.__action}}
+        #then python "$script" - {{.__pages}} "$@"
+        #else python "$script" {{.__action}} {{.__pages}} "$@"
+        #fi
+        python "$script" {{default "-" .__action}} {{default "4000" .__chunksize}} {{default "default" .__collection}} "$@"
 
-      
+  run:
+    silent: false
+    cmds:
+    - |
+      args={{._args_}} 
+      set -- ${args[@]}
+      cd $OPS_PWD
+      python "{{._script_}}" "$@"
+
   
