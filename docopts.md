@@ -13,6 +13,6 @@ Usage:
   ai stream <action> [<args>...]
   ai new <action> [<package>]
   ai user (add|delete|update) <user>
-  ai loader [--action=<action>] [--chunksize=<size>] [--collection=<name>] [--clean] <file>... 
+  ai loader [--action=<action>] [--chunksize=<size>] [--collection=<name>] [--clean] [--opts=<opts>] <file>... 
 ```
 

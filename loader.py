@@ -37,10 +37,10 @@ def parse_pdf(file):
     print("saved", res)
     return res
 
-def post_text(text, collection, filename, action, verbose = False):
+def post_text(text, collection, filename, action, options, verbose = False):
     res = None
     try:
-        msg = {"input": text, "state": collection }
+        msg = {"input": text, "options": options, "state": collection }
         jof = f"{filename}.tmp"
         Path(jof).write_text(json.dumps(msg))
         cmd = ["ops", "invoke", action, "-P", jof, ]
@@ -60,7 +60,7 @@ def post_text(text, collection, filename, action, verbose = False):
         return False
             
 
-def upload_text_by_lines(action, filename, group, collection):
+def upload_text_by_lines(action, filename, group, collection, options):
     count = int(group)
     loop = True
     pos = 0
@@ -78,13 +78,13 @@ def upload_text_by_lines(action, filename, group, collection):
             if len(lines) == 0:
                 continue
             text = "\n".join(lines)
-            if post_text(text, collection, filename, action):
+            if post_text(text, collection, filename, action, options):
                 pos += 1
                 print(pos, end=' ', flush=True)
             
         print()
 
-def upload_text_by_size(action, filename, max, collection):
+def upload_text_by_size(action, filename, max, collection, options):
     lines = Path(filename).read_text().splitlines()
     n = nc = 0
     text = ""
@@ -99,15 +99,15 @@ def upload_text_by_size(action, filename, max, collection):
             #print(nc, len(text))
             end = '\n' if nc % 10 == 0 else ' '
             print(nc, f"[{len(text)}]", end=end, flush=True)
-            if post_text(text, collection, filename, action):
+            if post_text(text, collection, filename, action, options):
                 text = line
             else:
                 print("Aborting...")
                 return
         else:
-            text += line
+            text += f"\n{line}"
     nc +=1
-    post_text(text, collection, filename, action)
+    post_text(text, collection, filename, action, options)
     print(f"\nRead {n} lines, sent {nc} chunk of max size {max}")
 
 def main(argv):
@@ -120,14 +120,15 @@ def main(argv):
     try: maxsize = int(argv[1])
     except: pass
     collection = argv[2]
-    for filename in argv[3:]:
+    options = argv[3]
+    for filename in argv[4:]:
         print(filename)
         if filename.endswith(".pdf"):
             print(">>> converting", filename)
             filename = parse_pdf(filename)
         if action != "-":
             print("Action:", action, "MaxSize:", maxsize, "Collection:", collection, "Filename:", filename)
-            upload_text_by_size(action, filename, maxsize, collection)
+            upload_text_by_size(action, filename, maxsize, collection, options)
 
 #print(sys.argv)
 main(sys.argv[1:])

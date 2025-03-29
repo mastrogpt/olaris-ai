@@ -125,7 +125,7 @@ tasks:
         #then python "$script" - {{.__pages}} "$@"
         #else python "$script" {{.__action}} {{.__pages}} "$@"
         #fi
-        python "$script" {{default "-" .__action}} {{default "4000" .__chunksize}} {{default "default" .__collection}} "$@"
+        python "$script" {{default "-" .__action}} {{default "4000" .__chunksize}} {{default "default" .__collection}} "{{.__opts}}" "$@"
 
   run:
     silent: false
