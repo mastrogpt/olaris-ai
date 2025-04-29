@@ -9,7 +9,7 @@ def lessons():
     # list the first level key as a list of lesson names
     res = requests.get(f"{BASE}/lessons.yaml")
     data = yaml.load(res.text, Loader=yaml.FullLoader)
-    print("Available lessons:")
+    print("Available MastroGPT lessons:")
     for k in data.keys():
         print(" ", k)
     
