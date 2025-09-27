@@ -11,6 +11,7 @@ tasks:
       set -a
       test -e $OPS_PWD/.env && source $OPS_PWD/.env
       test -e $OPS_PWD/.testenv && source $OPS_PWD/.testenv
+      export PYTHONDONTWRITEBYTECODE=1
       python -m IPython
   
   chat:
